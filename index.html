@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cordel Williams — Software Engineer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --bg2:       #161b22;
+      --bg3:       #21262d;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --accent:    #58a6ff;
+      --accent2:   #3fb950;
+      --gold:      #d29922;
+      --red:       #f85149;
+      --radius:    10px;
+      --font:      'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(13,17,23,.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 clamp(1rem, 5vw, 3rem);
+      height: 58px;
+    }
+    .nav-logo {
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: .03em;
+      color: var(--text);
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted);
+      font-size: .9rem;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    /* ── SECTIONS ── */
+    section { padding: 5rem clamp(1rem, 8vw, 6rem); }
+    .section-label {
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .5rem;
+    }
+    h2.section-title {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 2.5rem;
+      color: var(--text);
+    }
+    .divider {
+      width: 48px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin: .75rem 0 2.5rem;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 58px;
+      background:
+        radial-gradient(ellipse 80% 50% at 60% 0%, rgba(88,166,255,.07) 0%, transparent 60%),
+        var(--bg);
+    }
+    .hero-eyebrow {
+      font-size: .85rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .hero-name {
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -.02em;
+      margin-bottom: 1rem;
+    }
+    .hero-name .highlight { color: var(--accent); }
+    .hero-tagline {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--muted);
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+    }
+    .hero-location {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .9rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-bottom: 3rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .6rem 1.4rem;
+      border-radius: var(--radius);
+      font-size: .9rem;
+      font-weight: 600;
+      transition: opacity .2s, transform .15s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn:hover { opacity: .85; transform: translateY(-1px); text-decoration: none; }
+    .btn-primary { background: var(--accent); color: #0d1117; }
+    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* role chips */
+    .role-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .3rem .8rem;
+      border-radius: 20px;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+    .chip-blue  { background: rgba(88,166,255,.12); color: var(--accent); border: 1px solid rgba(88,166,255,.25); }
+    .chip-green { background: rgba(63,185,80,.12);  color: var(--accent2); border: 1px solid rgba(63,185,80,.25); }
+    .chip-gold  { background: rgba(210,153,34,.12); color: var(--gold);   border: 1px solid rgba(210,153,34,.25); }
+
+    /* ── OPEN TO ROLES ── */
+    #roles {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 3.5rem clamp(1rem, 8vw, 6rem);
+    }
+    .roles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-top: 2rem;
+    }
+    .role-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.6rem;
+      transition: border-color .25s, transform .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .role-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .role-card.ic::before    { background: var(--accent); }
+    .role-card.sm::before    { background: var(--accent2); }
+    .role-card.qa::before    { background: var(--gold); }
+    .role-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .role-icon { font-size: 2rem; margin-bottom: .75rem; }
+    .role-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .4rem; }
+    .role-card p  { font-size: .875rem; color: var(--muted); }
+
+    /* ── EXPERIENCE ── */
+    #experience { background: var(--bg); }
+    .company-block { margin-bottom: 3rem; }
+    .company-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-bottom: 1.25rem;
+    }
+    .company-name { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+    .company-loc  { font-size: .85rem; color: var(--muted); }
+
+    .role-block {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .role-block::before {
+      content: '';
+      position: absolute;
+      left: 0; top: .55rem;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .role-block::after {
+      content: '';
+      position: absolute;
+      left: 3.5px; top: 1.3rem;
+      width: 1px;
+      height: calc(100% - .4rem);
+      background: var(--border);
+    }
+    .role-block:last-child::after { display: none; }
+    .role-header {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .25rem;
+      margin-bottom: .6rem;
+    }
+    .role-title { font-size: .95rem; font-weight: 600; color: var(--text); font-style: italic; }
+    .role-dates { font-size: .82rem; color: var(--muted); white-space: nowrap; }
+    .role-block ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+    .role-block li {
+      font-size: .9rem;
+      color: var(--muted);
+      padding-left: 1.2rem;
+      position: relative;
+    }
+    .role-block li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ── SKILLS ── */
+    #skills { background: var(--bg2); }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+    .skill-category {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+    }
+    .skill-category h3 {
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .tag {
+      background: rgba(88,166,255,.08);
+      border: 1px solid rgba(88,166,255,.2);
+      color: var(--text);
+      font-size: .8rem;
+      padding: .25rem .65rem;
+      border-radius: 6px;
+    }
+
+    /* ── CERTS ── */
+    #certs { background: var(--bg); }
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+    .cert-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: border-color .2s;
+    }
+    .cert-card:hover { border-color: var(--accent); }
+    .cert-icon { font-size: 1.8rem; flex-shrink: 0; margin-top: .1rem; }
+    .cert-body h3 { font-size: .95rem; font-weight: 700; margin-bottom: .25rem; }
+    .cert-body p  { font-size: .82rem; color: var(--muted); }
+    .badge-inprogress {
+      display: inline-block;
+      margin-top: .4rem;
+      font-size: .7rem;
+      font-weight: 600;
+      background: rgba(210,153,34,.15);
+      color: var(--gold);
+      border: 1px solid rgba(210,153,34,.3);
+      padding: .15rem .5rem;
+      border-radius: 4px;
+    }
+
+    /* ── EDUCATION ── */
+    #education { background: var(--bg2); }
+    .edu-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.6rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .edu-school { font-size: 1.05rem; font-weight: 700; margin-bottom: .3rem; color: var(--text); }
+    .edu-degree { font-size: .9rem; color: var(--muted); margin-bottom: .2rem; }
+    .edu-badge {
+      background: rgba(88,166,255,.1);
+      border: 1px solid rgba(88,166,255,.2);
+      color: var(--accent);
+      font-size: .75rem;
+      font-weight: 600;
+      padding: .2rem .6rem;
+      border-radius: 5px;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--bg);
+      text-align: center;
+    }
+    #contact .section-label { justify-content: center; }
+    .contact-card {
+      max-width: 560px;
+      margin: 0 auto;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 3rem 2rem;
+    }
+    .contact-card h2 { font-size: 1.6rem; margin-bottom: .75rem; }
+    .contact-card p  { color: var(--muted); font-size: .95rem; margin-bottom: 2rem; }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: .75rem;
+    }
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .55rem 1.2rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: border-color .2s, color .2s;
+    }
+    .contact-link:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem clamp(1rem, 8vw, 6rem);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: .5rem;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hero-name { font-size: 2.6rem; }
+      .company-header { flex-direction: column; gap: .1rem; }
+      .role-header { flex-direction: column; }
+      .edu-card { flex-direction: column; }
+    }
+
+    /* ── FADE-IN ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">Cordel <span>Williams</span></span>
+  <ul class="nav-links">
+    <li><a href="#roles">Open To</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#certs">Certs</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-eyebrow">Available for new opportunities</div>
+  <h1 class="hero-name">Cordel<br><span class="highlight">Williams</span></h1>
+  <p class="hero-tagline">
+    Senior Software Engineer with 9+ years building secure, high-throughput systems at scale —
+    and a certified Scrum Master who ships quality code and grows engineering teams.
+  </p>
+  <div class="hero-location">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a5.53 5.53 0 0 0-5.5 5.5c0 3.04 5.5 10.5 5.5 10.5S13.5 8.54 13.5 5.5A5.53 5.53 0 0 0 8 0zm0 7.5a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+    Atlanta, GA
+  </div>
+  <div class="hero-cta">
+    <a href="mailto:cwilliams.gatech@gmail.com" class="btn btn-primary">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/></svg>
+      Get In Touch
+    </a>
+    <a href="https://linkedin.com/in/cordelwilliamsgatech" target="_blank" rel="noopener" class="btn btn-outline">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg>
+      LinkedIn
+    </a>
+    <a href="#contact" class="btn btn-outline">View Contact</a>
+  </div>
+  <div class="role-chips">
+    <span class="chip chip-blue">
+      <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/><path d="M6.854 4.646a.5.5 0 0 1 0 .708L4.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0zm2.292 0a.5.5 0 0 0 0 .708L11.793 8l-2.647 2.646a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708 0z"/></svg>
+      IC Software Engineer
+    </span>
+    <span class="chip chip-green">
+      <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708l-2 2zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708l-2 2zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/></svg>
+      Scrum Master
+    </span>
+    <span class="chip chip-gold">
+      <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/><path d="M8 4a.5.5 0 0 1 .5.5V8H11a.5.5 0 0 1 0 1H8a.5.5 0 0 1-.5-.5V4.5A.5.5 0 0 1 8 4z"/></svg>
+      QA Automation
+    </span>
+  </div>
+</section>
+
+<!-- OPEN TO -->
+<section id="roles">
+  <div class="section-label">What I'm looking for</div>
+  <h2 class="section-title">Open To These Roles</h2>
+  <div class="roles-grid">
+    <div class="role-card ic fade-in">
+      <div class="role-icon">⚙️</div>
+      <h3>IC Software Engineer</h3>
+      <p>Designing and delivering scalable backend systems with Java, Python, and cloud-native infrastructure. 9+ years shipping production code in enterprise environments.</p>
+    </div>
+    <div class="role-card sm fade-in">
+      <div class="role-icon">🏃</div>
+      <h3>Scrum Master</h3>
+      <p>A-CSM certified with hands-on experience running Agile teams at Cisco. Streamlined sprint workflows, reduced blockers, and drove on-time delivery across multiple release cycles.</p>
+    </div>
+    <div class="role-card qa fade-in">
+      <div class="role-icon">🔬</div>
+      <h3>QA Automation</h3>
+      <p>Building automated test infrastructure for security-critical products. Experienced in shift-left testing, CI/CD integration, adversarial testing, and regression pipeline ownership.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Career history</div>
+  <h2 class="section-title">Experience</h2>
+  <div class="divider"></div>
+
+  <!-- Cisco -->
+  <div class="company-block fade-in">
+    <div class="company-header">
+      <span class="company-name">Cisco Systems, Inc.</span>
+      <span class="company-loc">Alpharetta, GA</span>
+    </div>
+
+    <div class="role-block">
+      <div class="role-header">
+        <span class="role-title">Software Engineer in Test — Cisco Secure Firewall</span>
+        <span class="role-dates">Nov 2025 – Present</span>
+      </div>
+      <ul>
+        <li>Design and own automated test infrastructure for Cisco Secure Firewall, validating security policy enforcement, failover behavior, and threat detection across distributed deployments.</li>
+        <li>Drive shift-left quality initiatives by embedding test architecture directly into the CI/CD pipeline, reducing regression escape rate and accelerating release confidence.</li>
+        <li>Apply adversarial testing methodologies to security-critical code paths, probing edge cases in authentication, authorization, and network policy enforcement.</li>
+      </ul>
+    </div>
+
+    <div class="role-block">
+      <div class="role-header">
+        <span class="role-title">Senior Software Engineer | Scrum Master</span>
+        <span class="role-dates">Nov 2024 – Nov 2025</span>
+      </div>
+      <ul>
+        <li>Promoted for consistently delivering high-quality, scalable code; led technical initiatives that improved system performance and drove measurable gains in customer satisfaction.</li>
+        <li>Mentored junior engineers through structured code reviews and knowledge-sharing sessions, improving team velocity and code quality standards.</li>
+      </ul>
+    </div>
+
+    <div class="role-block">
+      <div class="role-header">
+        <span class="role-title">Software Engineer II | Scrum Master</span>
+        <span class="role-dates">Apr 2021 – Nov 2024</span>
+      </div>
+      <ul>
+        <li>Spearheaded security assessments for Cisco Secure Network Analytics (SNA), identifying and mitigating vulnerabilities in proprietary and open-source dependencies across the product surface.</li>
+        <li>Led end-to-end design and delivery of a deprecated-feature removal initiative in SNA, coordinating across multiple teams to ensure zero customer-impacting regressions.</li>
+        <li>Served as Scrum Master for an Agile team of 6+ engineers; streamlined sprint workflows and communication channels, resulting in on-time delivery across multiple release cycles.</li>
+        <li>Resolved critical customer escalations in real time for global enterprise clients, reducing MTTR and preserving customer SLA commitments.</li>
+      </ul>
+    </div>
+
+    <div class="role-block">
+      <div class="role-header">
+        <span class="role-title">Software Engineer I</span>
+        <span class="role-dates">Nov 2016 – Apr 2021</span>
+      </div>
+      <ul>
+        <li>Designed and implemented a Failover System for SNA, improving system redundancy and uptime by 40%; system handles millions of network flow records per second on Vertica.</li>
+        <li>Developed TACACS+ remote authorization for Stealthwatch, securing $10M+ in government contract revenue by maintaining required federal security certifications.</li>
+        <li>Built a centralized network management system, streamlining device configuration, topology discovery, and flow data ingestion at scale.</li>
+        <li>Optimized high-throughput flow data pipelines in Vertica, sustaining processing of millions of network flows per second under peak load.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Macy's -->
+  <div class="company-block fade-in">
+    <div class="company-header">
+      <span class="company-name">Macy's Systems and Technology</span>
+      <span class="company-loc">Atlanta, GA</span>
+    </div>
+    <div class="role-block">
+      <div class="role-header">
+        <span class="role-title">Java Developer</span>
+        <span class="role-dates">Jan 2016 – Nov 2016</span>
+      </div>
+      <ul>
+        <li>Engineered TALOS, an in-house logistics platform, improving warehouse efficiency and order fulfillment throughput across multiple distribution centers.</li>
+        <li>Developed Spring Boot microservices for critical business workflows, improving system scalability, fault isolation, and maintainability of core retail operations.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">Technical toolkit</div>
+  <h2 class="section-title">Skills</h2>
+  <div class="divider"></div>
+  <div class="skills-grid">
+    <div class="skill-category fade-in">
+      <h3>Languages</h3>
+      <div class="tag-list">
+        <span class="tag">Java 8+</span>
+        <span class="tag">Python 3</span>
+        <span class="tag">SQL</span>
+      </div>
+    </div>
+    <div class="skill-category fade-in">
+      <h3>Cloud &amp; Infrastructure</h3>
+      <div class="tag-list">
+        <span class="tag">AWS</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Jenkins</span>
+        <span class="tag">GitHub Actions</span>
+        <span class="tag">CI/CD</span>
+      </div>
+    </div>
+    <div class="skill-category fade-in">
+      <h3>Frameworks &amp; Tools</h3>
+      <div class="tag-list">
+        <span class="tag">Spring Boot</span>
+        <span class="tag">Hibernate</span>
+        <span class="tag">REST APIs</span>
+        <span class="tag">gRPC</span>
+        <span class="tag">Vertica</span>
+      </div>
+    </div>
+    <div class="skill-category fade-in">
+      <h3>Testing &amp; Quality</h3>
+      <div class="tag-list">
+        <span class="tag">Test Automation</span>
+        <span class="tag">Contract Testing</span>
+        <span class="tag">Adversarial Testing</span>
+        <span class="tag">Regression Pipelines</span>
+        <span class="tag">Security Testing</span>
+      </div>
+    </div>
+    <div class="skill-category fade-in">
+      <h3>Observability</h3>
+      <div class="tag-list">
+        <span class="tag">Network Telemetry</span>
+        <span class="tag">Flow Data Analytics</span>
+        <span class="tag">Performance Monitoring</span>
+      </div>
+    </div>
+    <div class="skill-category fade-in">
+      <h3>Agile &amp; Process</h3>
+      <div class="tag-list">
+        <span class="tag">Scrum</span>
+        <span class="tag">Agile Delivery</span>
+        <span class="tag">Sprint Planning</span>
+        <span class="tag">Mentorship</span>
+        <span class="tag">Code Review</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTS -->
+<section id="certs">
+  <div class="section-label">Credentials</div>
+  <h2 class="section-title">Certifications</h2>
+  <div class="divider"></div>
+  <div class="certs-grid">
+    <div class="cert-card fade-in">
+      <div class="cert-icon">🏅</div>
+      <div class="cert-body">
+        <h3>Advanced Certified ScrumMaster</h3>
+        <p>Scrum Alliance · A-CSM</p>
+      </div>
+    </div>
+    <div class="cert-card fade-in">
+      <div class="cert-icon">☁️</div>
+      <div class="cert-body">
+        <h3>AWS Certified Cloud Practitioner</h3>
+        <p>Amazon Web Services</p>
+      </div>
+    </div>
+    <div class="cert-card fade-in">
+      <div class="cert-icon">🏗️</div>
+      <div class="cert-body">
+        <h3>AWS Solutions Architect Associate</h3>
+        <p>Amazon Web Services</p>
+        <span class="badge-inprogress">In Progress</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-label">Academic background</div>
+  <h2 class="section-title">Education</h2>
+  <div class="divider"></div>
+  <div class="edu-card fade-in">
+    <div>
+      <div class="edu-school">Georgia Institute of Technology</div>
+      <div class="edu-degree">M.S., Computer Science — Machine Learning Specialization · 2022</div>
+      <div class="edu-degree">B.S., Computer Engineering · 2015</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.5rem;align-items:flex-end;flex-shrink:0;">
+      <span class="edu-badge">Atlanta, GA</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-card fade-in">
+    <h2>Let's Connect</h2>
+    <p>Open to IC Software Engineering, Scrum Master, and QA Automation opportunities. Reach out and let's talk.</p>
+    <div class="contact-links">
+      <a href="mailto:cwilliams.gatech@gmail.com" class="contact-link">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/></svg>
+        cwilliams.gatech@gmail.com
+      </a>
+      <a href="https://linkedin.com/in/cordelwilliamsgatech" target="_blank" rel="noopener" class="contact-link">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg>
+        LinkedIn
+      </a>
+      <a href="tel:4703313181" class="contact-link">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/></svg>
+        470-331-3181
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>Cordel Williams · Atlanta, GA</span>
+  <span>IC Engineer · Scrum Master · QA Automation</span>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.12 }
+  );
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
